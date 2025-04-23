@@ -1,17 +1,17 @@
 ## Incentivizing the Green Vote? <br> <small> The Role of California's Cap-and-Trade Investments on Electoral Outcomes
 
 This repository contains the replication package for the ECON 494 Thesis project. 
+To replicate all fogures and tables in this project, do the following:
+- Clone this repository 
+- In `master.do`, set path to `BIE_thesis_replication_package` on your machine
 
-The replication package is composed of two parts:
-- `replication_package_494_do`, which is the main code repository that contains all do-files required to run this project. See the tree below.
-- To run all do-files in this project, add two paths to `master.do`
-    - path to `replication_package_494_do` on your machine.
-    - path to `replication_package_494` on your machine.
-    - see `master.do` header for sample paths 
-- The folder `replication_package_494` stores and calls all data used in this project. Note that all folders except `0_raw_input` are empty. The raw input folder contains all the raw data required to run the do-files in this project. The folders `1_intermediate`, `2_final` and `3_tables` are populated by the do-files as they are sequentially run in `master.do`
-    - All outputs used in the paper are stored in `3_tables`
-    - All intermediate datasets are stored in `1_intermediate`
-    - All final datasets are stored in `2_final`
+
+`replication_package_494` stores and calls all data used in this project. Note that all folders except `0_raw_input` are empty. The raw input folder contains all the raw data required to run the do-files in this project. The folders `1_intermediate`, `2_final` and `3_tables` are populated by the do-files as they are sequentially run in `master.do`
+  - All outputs used in the paper are stored in `3_tables`
+  - All intermediate datasets are stored in `1_intermediate`
+  - All final datasets are stored in `2_final`
+
+`replication_package_494_do` contains all do-files for this project
 
 ## replication_package_494_do
 ```
