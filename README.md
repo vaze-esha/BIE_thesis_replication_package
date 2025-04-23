@@ -51,6 +51,7 @@ Each of the following sections details the contents of the do-files. Note that t
   - Define treatment and control tracts using RD cutoff:
     - Version 2: CES ≥ 32.66 & ≤ 36.52 (bandwidth 3.86) 
     - Version 3: CES ≥ 38.69 & ≤ 42.55 (bandwidth 3.86)
+    - for Appendix tables with toggled bandwidth, change bandwidth value in this file to 5.86
   - Compute:
     - `Treat_Tract`: treated indicator
     - `Control_Tract`: control indicator
@@ -85,7 +86,6 @@ This script processes county-level ballot proposition results from raw Excel fil
 - Load Excel files for both **June** and **November** ballots.
 - Rename columns for consistency and readability.
 - Drop non-county rows (e.g., state totals, percentage rows).
-- Remove irrelevant or empty columns.
 
 2. Save Individual Proposition Datasets
 - For each proposition:
@@ -95,7 +95,6 @@ This script processes county-level ballot proposition results from raw Excel fil
 3. Process Proposition Outcomes
 - For each saved proposition dataset:
   - Clean county names and drop header rows again if necessary.
-  - Convert vote counts from string to numeric.
   - Compute the proportion of `Yes` votes:
     ```
     prop_yes = Yes_votes / (Yes_votes + No_votes)
@@ -121,33 +120,25 @@ This process is repeated for each election year, with the appropriate propositio
 - **Household Income & Transit Data** (`ACSDP1Y{year}.DP03-Data.csv`):
   - Imports data for years 2014–2019, 2021–2023.
   - Keeps commuting mode estimates (carpooled, drive alone, transit, walk, work from home, other) and median household income.
-  - Cleans:
-    - Drops first two rows.
-    - Removes `" County, California"` from `County` names.
-    - Converts relevant variables from string to numeric.
 
 - **Population Data** (`population_estimates.csv`):
   - Drops metadata and unnecessary columns (`v6`, `date_code`).
   - Extracts `Year` from `date_desc` and removes census/base years.
-  - Converts `Year` and `Population` to numeric.
   - Saves one `.dta` file per year (e.g., `population_data_2014.dta`).
 
 - **Education Data** (`ACSST5Y{year}.S1501-Data.csv`):
   - Imports data for 2014–2023.
   - Retains educational attainment columns and renames for clarity (e.g., `BACHELORS_OR_HIGHER`).
-  - Drops first two rows and cleans county names.
   - Converts columns to numeric and saves per year (e.g., `pop_education_2015.dta`).
 
 - **Race Data** (`ACSSE{year}.K200201-Data.csv`):
   - Imports race distribution data for 2014–2019, 2021–2023.
   - Keeps race population estimates and renames variables.
-  - Drops first two rows and cleans county names.
   - Saves per year (e.g., `race_2021.dta`).
 
 - **Housing Tenure Data** (`ACSDT5Y{year}.B25003-Data.csv`):
   - Imports homeowner and renter counts for 2014–2023.
   - Renames columns (`total_homeowners`, `total_renters`, etc.).
-  - Cleans county names and drops first two rows.
   - Saves per year (e.g., `renter_homeowner_2016.dta`).
 
 ---
@@ -163,7 +154,6 @@ This process is repeated for each election year, with the appropriate propositio
 - **For each year** in 2014–2019, 2021–2023:
   - Loads income & transit data.
   - Merges in race, education, and housing tenure data by county.
-  - Drops `_merge` variables after each merge.
   - Saves the merged dataset as `covariates/covariates_{year}.dta`.
 
 ---
@@ -200,7 +190,6 @@ This process is repeated for each election year, with the appropriate propositio
 - Load data for each year.
 - Drop duplicates and filter for CES Version 2.
 - Merge with same-year covariates.
-- Clean numeric fields: regex + destring.
 - Create and label key variables (same as 2015).
 - Save each cleaned file.
 
@@ -241,7 +230,6 @@ This process is repeated for each election year, with the appropriate propositio
 ---
 
 - All numeric conversions are safeguarded by removing non-numeric characters before `destring`.
-- Care taken to avoid duplication and ensure clean merges.
 - `CESVersion` filters help address survey version inconsistencies.
 - All constructed proportions and log values are labeled for readability in output tables.
 - `total_asians` are excluded from `prop_nonwhite` variable by design.
@@ -262,13 +250,10 @@ This process is repeated for each election year, with the appropriate propositio
   - `cumulative_funding` = sum of `TOT_funding` per county across years
   - `log_cumulative_funding` = log of the cumulative funding
   - `avg_instrument` = average of instrument per `County-Year`
-- Label key variables.
-- Save updated panel data.
 
 - Run and store:
   - OLS: `log_cumulative_funding` on `instrument`
   - OLS + control: add `prop_nonwhite`
-- Export to LaTeX via `outreg2`.
 
 ---
 
@@ -288,15 +273,15 @@ This process is repeated for each election year, with the appropriate propositio
 3. **2SLS (IV) Regressions**
 
 - Load full panel again.
-- Define propositions for:
-  - Environmental years: 2016, 2018, 2022
+- Define environmental propositions for:
+  - Treatment years: 2016, 2018, 2022
   - Placebo years: 2012, 2014
 - For each year and proposition:
   - Run OLS: outcome on `log_cumulative_funding`
   - Run 2SLS: instrument `instrument` for `log_cumulative_funding`
   - Output OLS and 2SLS to `ols_2sls_<year>.tex`
   - Generate `coefplot` per year for 2SLS estimates
-  - Export plot as PNG
+  - With control (`prop_nonwhite` added) estimates exported as `ols_2sls_<year>_wcontrols.tex`
 
 ---
 
@@ -317,12 +302,11 @@ This process is repeated for each election year, with the appropriate propositio
 - Merge panel data with shapefile by `County`.
 - For each year from 2015–2023:
   - Plot `TOT_funding` using `spmap`
-  - Save funding map for each year as PNG.
+  - Export funding map for each year as PNG.
 
 ---
 
 - 2018 instrument values filtered for version consistency.
-- Uses `outreg2` and `coefplot` to streamline reporting.
-- Panel structure enables consistent comparison across years.
+- Uses `outreg2` and `coefplot` to report estimates.
 - `spmap` visualizations highlight funding distribution by geography and time.
 - Placebo years (2012, 2014) included to test for pre-trends.

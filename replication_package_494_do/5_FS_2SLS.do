@@ -122,7 +122,8 @@
 	}
 	
 	clear
-	*/
+
+	
 /*============================================================================*/
 	
 								// 2SLS
@@ -194,6 +195,84 @@
 
 			// Export the coefplot as an image
 			graph export "$tables/`year'_2sls_coefplot.png", replace
+
+			display "Coefplot for `year' generated successfully."
+
+	}
+
+	clear
+
+/*============================================================================*/
+	
+						// 2SLS WITH CONTROLS 
+		
+/*============================================================================*/
+	
+	use "$final_data/panel_2015_2023.dta", clear
+
+	// Define local environmental propositions only 
+	local props_2018 3 6 68 72
+	local props_2016 65 67
+	local props_2022 30
+	// placebo years 
+	local props_2012 39
+	local props_2014 1
+
+	* Loop through years
+	foreach year in 2012 2014 2016 2018 2022 {
+		* Get the propositions for this year
+		local props `props_`year''
+
+		* Reset stored estimates
+		estimates clear
+
+		* Run regressions for each proposition
+		local first = 1
+		foreach num in `props' {
+			preserve   // Prevent permanent changes
+
+			* Run OLS regression
+			reg prop_yes_`num' log_cumulative_funding prop_nonwhite, vce(cluster county_id)
+			est store ols_prop_`num'
+
+			* Run 2SLS (IV) regression
+			ivreg2 prop_yes_`num' (log_cumulative_funding = instrument) prop_nonwhite, cluster(county_id)
+			est store sls_prop_`num'
+
+			* Output both OLS and 2SLS estimates to the same table
+			if `first' {
+				outreg2 [ols_prop_`num' sls_prop_`num'] using "$tables/`year'_ols_2sls.tex", replace label ///
+					title("OLS and 2SLS Estimates for `year'")
+				local first 0
+			}
+			else {
+				outreg2 [ols_prop_`num' sls_prop_`num'] using "$tables/`year'_ols_2sls.tex", append label
+			}
+
+			restore   // Reload full dataset for next iteration
+		}
+
+		display "Results for `year' saved successfully."
+		
+		
+			// Build the coefplot command dynamically for all propositions in this year
+			local coefplot_cmd
+			foreach num in `props' {
+				local coefplot_cmd "`coefplot_cmd' (sls_prop_`num', label("Prop `num'"))"
+			}
+
+			// Generate the coefplot for the year
+			coefplot `coefplot_cmd', ///
+				vert ///
+				title("Votes in Favour (2SLS) for `year'") ///
+				xlabel(, angle(360) grid) ///
+				ylabel(, grid) ///
+				drop(_cons) ///
+				xline(0) ///
+				yline(0) ///
+
+			// Export the coefplot as an image
+			graph export "$tables/`year'_2sls_coefplot_wcontrols.png", replace
 
 			display "Coefplot for `year' generated successfully."
 
