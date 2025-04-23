@@ -105,7 +105,7 @@ This script processes county-level ballot proposition results from raw Excel fil
     - `0` otherwise
 
 4. Save Final Cleaned Datasets
-- Overwrite each proposition file with the final cleaned version containing:
+- Save each proposition file with the final cleaned version containing:
   - `County`
   - `Yes` and `No` vote counts
   - `prop_yes` share
