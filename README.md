@@ -7,13 +7,13 @@ The replication package is composed of two parts:
 - To run all do-files in this project, add two paths to `master.do`
     - path to `replication_package_494_do` on your machine.
     - path to `replication_package_494` on your machine.
-    - `master.do` header for sample paths 
-- The folder `replication_package_494` stores and calls all data used in this project. Note that all folders except `0_raw_input` are empty. The raw input folder contains all the raw data required to run the do-files in this project. The folders `1_intermediate`, `2_final` and `3_tables` are populated by the do-files as they are sequentially called. 
+    - see `master.do` header for sample paths 
+- The folder `replication_package_494` stores and calls all data used in this project. Note that all folders except `0_raw_input` are empty. The raw input folder contains all the raw data required to run the do-files in this project. The folders `1_intermediate`, `2_final` and `3_tables` are populated by the do-files as they are sequentially run in `master.do`
     - All outputs used in the paper are stored in `3_tables`
     - All intermediate datasets are stored in `1_intermediate`
     - All final datasets are stored in `2_final`
 
-## Code Directory Tree 
+## replication_package_494_do
 ```
 ├── 1_import_pre_process.do
 ├── 2_ballot_imports
@@ -30,7 +30,7 @@ The replication package is composed of two parts:
 └── master.do
 ```
 
-Each of the following sections details the do-files, and provides notes on the code. Note that these do not have to be run individually.
+Each of the following sections details the contents of the do-files. Note that these do not have to be run individually. Please run `master.do` only to replicate all outputs.
 
 ### 1_import_pre_process.do
 1. Import and Clean Raw Data
@@ -46,10 +46,10 @@ Each of the following sections details the do-files, and provides notes on the c
 2. Instrument Construction by CES Version
 
 - For **each CES version (2 and 3)**:
-  - Merge CCI tracts with CES scores.
-  - Deduplicate to tract-county-year level.
+  - Merge CCI census tracts with CES scores.
+  - De-duplicate to tract-county-year level.
   - Define treatment and control tracts using RD cutoff:
-    - Version 2: CES ≥ 32.66 & ≤ 36.52 (bandwidth 3.86)
+    - Version 2: CES ≥ 32.66 & ≤ 36.52 (bandwidth 3.86) 
     - Version 3: CES ≥ 38.69 & ≤ 42.55 (bandwidth 3.86)
   - Compute:
     - `Treat_Tract`: treated indicator
