@@ -3,7 +3,7 @@
 This repository contains the replication package for the ECON 494 Thesis project. 
 To replicate all fogures and tables in this project, do the following:
 - Clone this repository 
-- In `master.do`, set header paths to `BIE_thesis_replication_package` on your machine
+- In `master.do`, set header path to `BIE_thesis_replication_package` on your machine
 
 
 `replication_package_494` stores and calls all data used in this project. Note that all folders except `0_raw_input` are empty. The raw input folder contains all the raw data required to run the do-files in this project. The folders `1_intermediate`, `2_final` and `3_tables` are populated by the do-files as they are sequentially run in `master.do`
