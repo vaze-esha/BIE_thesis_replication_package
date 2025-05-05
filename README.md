@@ -27,6 +27,7 @@ To replicate all fogures and tables in this project, do the following:
 ├── 3_process_covariates.do
 ├── 4_merge_covariates_with_outcomes.do
 ├── 5_FS_2SLS.do
+├── 5_1_voter_turnout.do
 └── master.do
 ```
 
@@ -310,3 +311,15 @@ This process is repeated for each election year, with the appropriate propositio
 - Uses `outreg2` and `coefplot` to report estimates.
 - `spmap` visualizations highlight funding distribution by geography and time.
 - Placebo years (2012, 2014) included to test for pre-trends.
+
+### 5_1_voter_turnout.do
+
+This script performs a Two-Stage Least Squares (2SLS) regression analysis to study voter turnout across multiple years (2022, 2018, 2016). It includes:
+
+1. **Data Preparation**: Merges the panel with voter participation statistics from the secretary of state.
+2. **Estimation**:
+   - OLS: Voter Turnout on Log cumulative funding
+   - OLS with proportion non-white added as control 
+   - 2SLS: Voter Turnout on instrumented Log cumulative funding
+   - 2SLS with with proportion non-white added as control
+3. **Output**: Results are exported to `year_vt.tex` in `3_tables`
