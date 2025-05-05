@@ -13,7 +13,7 @@
 	
 	* ADD PATH TO REPLICATION REPO HERE 
 
-	global user_machine "USER/PATH/TO/REPO/BIE_thesis_replication_package"
+	global user_machine "/Users/eshavaze/BIE_thesis_replication_package"
 	
 ********************************************************************************
 ********************************************************************************
@@ -65,6 +65,7 @@
 	do "$dodir/3_process_covariates.do" 
 	do "$dodir/4_merge_covariates_with_outcomes.do"
 
-	
+
 	// DATA ANALYSIS FILES 
 	do "$dodir/5_FS_2SLS.do"
+	do "$dodir/5_1_voter_turnout.do"

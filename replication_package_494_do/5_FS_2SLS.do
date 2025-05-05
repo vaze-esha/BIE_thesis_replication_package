@@ -1,15 +1,11 @@
 /*==============================================================================
-							1_regress_iv_master.do
+							5_FS_2SLS
 ================================================================================
 
 	PURPOSE:
 	
-		1. run first stage for all years 
-		
-	// i want variation over time in instrument and funding 
-	// funding time trends are part of treatment effect -- policy timing is endogenous to the outcome.
-	// cumulative funding has built in time trends 
-			
+	1. FS, RF, 2SLS for all years 
+	2. produce maps to show funding variation
 		
 ==============================================================================*/
 
@@ -89,7 +85,7 @@
 	local props_2022 30
 	
 	* Loop through years
-	foreach year in 2016 2018 2022{
+	foreach year in 2016 2018 2022 {
 		* Get the propositions for this year
 		local props `props_`year''
 

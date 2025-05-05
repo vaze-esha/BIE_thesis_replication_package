@@ -1,20 +1,40 @@
 /*==============================================================================
-							4_4_2022_ballot.do
+							VOTER_PARTICIPATION_IMPORTS
 ================================================================================
 
 	PURPOSE:
 	
-		1. create yearly ballot outcome by county datasets 
-		
-	INPUTS:
-		1. input_data/ballot_2020.xlsx
-	
-	OUTPUTS:
+		1. process voter turnout data
 	
 	
 		
 ==============================================================================*/
 
+/*==============================================================================
+									2022
+==============================================================================*/	
+	import excel "$raw_input_data/ballots/2022_voter_participation.xlsx", sheet("Table 2") firstrow clear
+	// we will now split these by ballot 
+	
+
+	rename NumberofPrecincts Number_of_Precincts
+	rename EligibletoRegister Eligible_to_Register
+	rename RegisteredVoters1 Registered_Voters
+	rename PrecinctVoters Precinct_Voters
+	rename VoteByMailVoters Vote_By_Mail_Voters
+	rename TotalVoters Total_Voters
+	rename PercentofVoteByMailVoters Percent_Vote_By_Mail
+	rename TurnoutRegistered Turnout_Registered
+	rename TurnoutEligible Turnout_Eligible
+
+	// remove stars 
+	foreach var of varlist County {
+    replace `var' = subinstr(`var', "*", "", .)  // Remove all asterisks
+}
+	// drop last 2 rows
+	drop in 59/60
+	
+	save "$intermediate_data/2022_voter_participation.dta", replace 
 	
 /*==============================================================================
 									2018 
