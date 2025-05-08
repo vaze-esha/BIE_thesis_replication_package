@@ -291,23 +291,21 @@
 ==============================================================================*/
 	
 	// SET SCHEME
-	set scheme s1color
-	graph set window fontface "Helvetica"  // Set font to helvetica
-	
+	set scheme white_tableau
+	graph set window fontface "andale mono"  // Set font 
 /*==============================================================================
 								SUM STATS
 ==============================================================================*/
 	
 	// LOG CUML FUNDING
 	histogram log_cumulative_funding, bins(15) ///
-		fcolor(emerald) lcolor(white) /// Fill = emerald, outline = black
-		graphregion(color(white)) 
+		fcolor(green) lcolor(white) /// Fill = emerald, outline = black
 		
 	graph export "$tables/log_cuml_funding.png", replace
 
 		
 	// INSTRUMENT
-	twoway (line avg_instrument county_id, by(Year) lcolor(emerald)) ///
+	twoway (line avg_instrument county_id, by(Year) lcolor(green)) ///
        (scatter avg_instrument county_id, mcolor(green%50)), ///
        by(Year, legend(off)) ///
 	   xlabel(none)
@@ -315,6 +313,8 @@
 	graph export "$tables/instrument_dist.png", replace
 	
 	clear
+	
+	/*
 /*==============================================================================
 									MAPS!!!	
 ==============================================================================*/
